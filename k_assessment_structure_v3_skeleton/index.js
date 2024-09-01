@@ -16,10 +16,10 @@ const QUIT = "Thank you. You quit the game";                                    
 const PERCENT = .2;                                                             // % of holes for the map
 
 // x and y coordinates assignment
-let x = 0;
-let y = 0;
-let previousX = 0;
-let previousY = 0;
+// let x = 0;
+// let y = 0;
+// let previousX = 0;
+// let previousY = 0;
 
 class Field{
 
@@ -27,9 +27,13 @@ class Field{
     constructor(field = [[]]) {
         this.field = field;                                                     // this.field is a property of the class Field 
         this.gamePlay = false;                                                  // when the game is instantiated, the gamePlay is false
+        this.x = 0;                                                             // now, player's x location is tracked locally
+        this.y = 0;                                                             // now, player's y location is tracked locally
+        this.previousX = 0;                                                     // now, player's previousX location is tracked locally
+        this.previousY = 0;                                                     // now, player's previousY location is tracked locally
     }
 
-    static welcomeMsg(msg) {                                                     // static Method to show game's welcome message
+    static welcomeMsg(msg) {                                                    // static Method to show game's welcome message
         console.log(msg);
     }
 
@@ -71,31 +75,31 @@ class Field{
 
       const userInput = String(input).toLowerCase();
 
-        previousX = x;                                                           // row coordinate to replace player and grass
-        previousY = y;                                                           // column coordinate to replace player and grass
+        this.previousX = this.x;                                                 // row coordinate to replace player and grass
+        this.previousY = this.y;                                                 // column coordinate to replace player and grass
        
         // user select up
         if (userInput === "u") {
-            x = x - 1;
+            this.x = this.x - 1;
         }
         // user select down
         if (userInput === "d") {       
-            x = x + 1;
+            this.x = this.x + 1;
         }
         // user select left
         if (userInput === "l") {
-            y = y - 1;
+            this.y = this.y - 1;
         }
         // user select right
         if (userInput === "r") {
-            y = y + 1;
+            this.y = this.y + 1;
         }
          /*  
         if the user exits out of the field
         end the game - set the gamePlay = false;
         inform the user that he step OUT of the game
         */
-        if (x < 0 || x > ROWS-1 || y < 0 || y > COLS-1) {
+        if (this.x < 0 || this.x > ROWS-1 || this.y < 0 || this.y > COLS-1) {
             console.log(OUT);
             this.endGame();
         }
@@ -104,7 +108,7 @@ class Field{
         end the game - set gamePlay = false;
         inform the user that he WIN the game 
         */
-        if (this.field[x][y] === CARROT) {
+        if (this.field[this.x][this.y] === CARROT) {
             console.log(WIN);
             this.endGame();
         }
@@ -113,7 +117,7 @@ class Field{
         end the game - set the gamePlay = false;
         inform the user that he LOST the game
         */
-        if (this.field[x][y] === HOLE) {
+        if (this.field[this.x][this.y] === HOLE) {
             console.log(LOST);
             this.endGame();
         }
@@ -130,8 +134,8 @@ class Field{
         update the display to show the user had moved to the new area on map
         ask for player's next move as well 
         */
-        this.field[x][y] = PLAYER;
-        this.field[previousX][previousY] = GRASS;
+        this.field[this.x][this.y] = PLAYER;
+        this.field[this.previousX][this.previousY] = GRASS;
     }
 
     plantCarrot() {
@@ -176,7 +180,7 @@ class Field{
                     break;
             }
 
-            if(!flagInvalid) {                                                   // only if flagInvalid is false, then update game
+            if(!flagInvalid) {                                                  // only if flagInvalid is false, then update game
                 this.updateGame(input);
             }
 
