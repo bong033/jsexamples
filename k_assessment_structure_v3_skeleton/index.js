@@ -7,10 +7,19 @@ const CARROT = "^";
 const PLAYER = "*";
 
 // WIN / LOSE / OUT / QUIT messages constants
-const WIN = "";                                                                 // TODO: customise message when player wins
-const LOST = "";                                                                // TODO: customise message when player lose
-const OUT = "";                                                                 // TODO: customise message when player is out of bounds (lose)
-const QUIT = "Game Ended."                                                      // TODO: customise message when player quits
+const WIN = "You've found the carrot. You've won the game!";                    // customise message when player wins
+const LOST = "You've dropped into the hole. You've lost the game.";             // customise message when player lose
+const OUT = "You've moved out of the filed. You've lost the game.";             // customise message when player is out of bounds (lose)
+const QUIT = "Thank you. You quit the game";                                    // customise message when player quits
+
+// MAP  PERCENTAGE                                                               
+const PERCENT = .2;                                                             // % of holes for the map
+
+// x and y coordinates assignment
+let x = 0;
+let y = 0;
+let previousX = 0;
+let previousY = 0;
 
 class Field{
 
@@ -117,7 +126,7 @@ class Field{
             this.quitGame();
         }
         /* 
-        TODO: otherwise, move player on the map: field[rowindex][colindex] = CARROT;
+        otherwise, move player on the map: field[rowindex][colindex] = CARROT;
         update the display to show the user had moved to the new area on map
         ask for player's next move as well 
         */
