@@ -10,132 +10,94 @@ const PLAYER = "*";
 const WIN = "";                                                                 // TODO: customise message when player wins
 const LOST = "";                                                                // TODO: customise message when player lose
 const OUT = "";                                                                 // TODO: customise message when player is out of bounds (lose)
-const QUIT = "Game Ended."                                                      // TODO: customise message when player quits
+const QUIT = "Thank you. You quit the game";                                    // TODO: customise message when player quits
+
+// MAP ROWS, COLUMNS AND PERCENTAGE
+const ROWS = 8;                                                                 // the game map will have 8 rows
+const COLS = 5;                                                                 // the game map will have 5 cols
+const PERCENT = .2;                                                             // % of holes for the map
 
 class Field{
 
     // create the constructor
-    constructor(field = [[]]) {
+    constructor(field = [[]]){
         this.field = field;                                                     // this.field is a property of the class Field 
         this.gamePlay = false;                                                  // when the game is instantiated, the gamePlay is false
     }
 
-    static welcomeMsg(msg) {                                                     // static Method to show game's welcome message
+    static welcomeMsg(msg){                                                     // static Method to show game's welcome message
         console.log(msg);
     }
 
-    static selectMapSize(direction) {                                           // allow user to select the number of rows and columns between 4 - 20
-        let selection = true;
-        let inputSelection = 0;
-    
-        while (selection) {
-            inputSelection = prompt(`Please enter the number of ${direction} between 4 - 20 for the field: `);
-            if (inputSelection <= 3 || inputSelection > 20 || isNaN(inputSelection)) {
-                console.log(`Invalid ${direction} selection, please try again.`);
-            } else {
-                selection = false;
-                return inputSelection;
-            }
-        } 
-    }
-
-    static generateField(rows, cols, percentage) {                              // static method that generates and return a 2D map
+    static generateField(rows, cols, percentage) {                              // static method that generates and return a 2D map   
         const map = [[]];
 
         for (let i = 0; i < rows; i++) {                                        // create the map with 8 rows
             map[i] = [];                                                        // each row will have 5 cols
             for (let j = 0; j < cols; j++) {
                 map[i][j] = Math.random() > percentage ? GRASS : HOLE;          // per col in each row, we generate grass(80%)/hole(20%)
-                
             }
         }
+
         return map;
     }
 
-    printField() {                                                               // print the game field (used to update during gameplay)       
+    printField(){                                                               // print the game field (used to update during gameplay)       
         this.field.forEach(element => {
             console.log(element.join(""));
-        })
+        });
     }
 
-    updateGame(input) {                                                          // Refer to details in the method's codeblock
+    updateGame(input){                                                          // TODO: Refer to details in the method's codeblock
 
       const userInput = String(input).toLowerCase();
-
-        previousX = x;                                                           // row coordinate to replace player and grass
-        previousY = y;                                                           // column coordinate to replace player and grass
-       
-        // user select up
-        if (userInput === "u") {
-            x = x - 1;
-        }
-        // user select down
-        if (userInput === "d") {       
-            x = x + 1;
-        }
-        // user select left
-        if (userInput === "l") {
-            y = y - 1;
-        }
-        // user select right
-        if (userInput === "r") {
-            y = y + 1;
-        }
-         /*  
-        if the user exits out of the field
-        end the game - set the gamePlay = false;
-        inform the user that he step OUT of the game
-        */
-        if (x < 0 || x > ROWS-1 || y < 0 || y > COLS-1) {
-            console.log(OUT);
-            this.endGame();
-        }
+        
         /*   
-        if the user arrives at the carrot
+        TODO: 1. if the user arrives at the carrot
         end the game - set gamePlay = false;
         inform the user that he WIN the game 
         */
-        if (this.field[x][y] === CARROT) {
-            console.log(WIN);
-            this.endGame();
-        }
+
         /* 
-        if the user arrives at the hole
+        TODO: 2. if the user arrives at the hole
         end the game - set the gamePlay = false;
         inform the user that he LOST the game
         */
-        if (this.field[x][y] === HOLE) {
-            console.log(LOST);
-            this.endGame();
-        }
+
         /*  
-        if the user ends the game
+        TODO: 3. if the user exits out of the field
+        end the game - set the gamePlay = false;
+        inform the user that he step OUT of the game
+        */
+
+        /*  
+        4. if the user ends the game
         end the game - set the gamePlay = false;
         inform the user that he QUIT the game
         */
-        if (userInput === "q") {
+        if(userInput === "q"){
             this.quitGame();
         }
+
         /* 
-        TODO: otherwise, move player on the map: field[rowindex][colindex] = CARROT;
-        update the display to show the user had moved to the new area on map
-        ask for player's next move as well 
+        TODO: 5. otherwise, move player on the map: this.field[rowindex][colindex] = PLAYER;
+        update this.field to show the user had moved to the new area on map
         */
-        this.field[x][y] = PLAYER;
-        this.field[previousX][previousY] = GRASS;
     }
 
-    plantCarrot() {
-        //plant the carrot by randomizing the X and Y location in the form of variables
+    plantCarrot(){
+        // TODO: plant the carrot by randomizing the X and Y location in the form of variables
         const X = Math.floor(Math.random() * (ROWS - 1)) + 1;
         const Y = Math.floor(Math.random() * (COLS - 1)) + 1;   
         this.field[X][Y] = CARROT;
+        console.log(X, Y);
     }
 
-    startGame() {      
-
+    startGame(){                                                                
         this.gamePlay = true;                                                   // set this.gamePlay = true to keep the game running
+
         this.field[0][0] = PLAYER;                                              // at the start of the game, we insert the player;
+
         this.plantCarrot();                                                     // plant the carrot manually, or use a Method
 
         while(this.gamePlay){                                                   // while the gamePlay is happening                                          
@@ -148,26 +110,27 @@ class Field{
 
             switch (input.toLowerCase()) {                                      // acknowledging the user's input
                 case "u":
-                    console.log("You move UP.");
+                    console.log("up");
                     break;
                 case "d":
-                    console.log("You move DOWN.");
+                    console.log("down");
                     break;
                 case "l":
-                    console.log("You move LEFT.");
+                    console.log("left");
                     break;
                 case "r":
-                    console.log("You move RIGHT.");
+                    console.log("right");
                     break;
                 case "q":
+                    console.log("quit");
                     break;
                 default:
-                    console.log("Invalid move.");
+                    console.log("Invalid input");
                     flagInvalid = !flagInvalid;
                     break;
             }
 
-            if(!flagInvalid) {                                                   // only if flagInvalid is false, then update game
+            if(!flagInvalid){                                                   // only if flagInvalid is false, then update game
                 this.updateGame(input);
             }
 
@@ -175,12 +138,12 @@ class Field{
 
     }
 
-    endGame() {                                                                  
+    endGame(){                                                                  
         this.gamePlay = false;                                                  // set property gamePlay to false
         process.exit();                                                         // end the Node app
     }
 
-    quitGame() {
+    quitGame(){
         console.log(QUIT);
         this.endGame();
     }
@@ -188,12 +151,9 @@ class Field{
 }
 
 // Instantiate a new instance of Field Class
-const ROWS = Number(Field.selectMapSize('rows'));                               // initialize the game map rows (user's selection)
-const COLS = Number(Field.selectMapSize('cols'));                               // initialize the game map columns (user's selection)
-
-const createField = Field.generateField(ROWS, COLS, PERCENT);                   // call Field's class static method to generate 2D field
+const createField = Field.generateField(ROWS, COLS, PERCENT);                   // call Field's class static method to generate 2D field                
 const gameField = new Field(createField);
 
-Field.welcomeMsg("Welcome to Find The Carrot Game!\n**************************************************");
+Field.welcomeMsg("Welcome to Find Your Hat!\n**************************************************\\n");
 
 gameField.startGame();
